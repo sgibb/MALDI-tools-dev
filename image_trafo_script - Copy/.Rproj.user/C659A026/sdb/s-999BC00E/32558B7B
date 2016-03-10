@@ -1,0 +1,17 @@
+{
+    "contents" : "library(jpeg)\nlibrary(EBImage)\n\nimgSrc<-NULL\nimgRef<-NULL\nrefCoords<-NULL\nsrcCoords<-NULL\nZoomRef<-NULL\nZoomSrc<-NULL\n\ns<-NULL\ntr<-NULL\nalpha<-NULL\nn<-NULL\ninput <- list()\n\nhgt=300\n\nimgRef <- readJPEG(\"MSI.jpg\")    #MSI=ref image\nimgSrc <- readJPEG(\"HE.jpg\")     #HE=src image\n\n\np1<-c(17,96) \np2<-c(122,255) \n\nq1<-c(16,19)\nq2<-c(122,178)\n\n\n\n\ndot = sum((q2-q1)*(p2-p1))   # dot product\nd=det(matrix(c(q2-q1,p2-p1), ncol=2, byrow= TRUE)) # determinant\nalpha<- atan2(d, dot) \n\n\nR<-matrix(c(cos(alpha), -sin(alpha), sin(alpha), cos(alpha)), nrow=2, byrow=TRUE) \n\n\ntz<-c((dim(imgSrc)[1])/2,(dim(imgSrc)[2])/2)\ns<-abs((p2-p1)/(R%*%(q2-q1)))\nsm<-matrix(c(s[1], 0, 0, s[2]), ncol=2, byrow=TRUE)\n\n#rotation\nn<-rotate(imgSrc, alpha*(180/pi))\nwriteJPEG(n,target = \"rot.jpg\")\n\ntzN<-c((dim(n)[1])/2,(dim(n)[2])/2)\ntr<-p1-sm%*%(R%*%(q1-tz)+tzN)\nwh=(dim(n)[1:2])*s\n\n#resize\nm<-resize(n, wh[1], wh[2])\nwriteJPEG(m,target = \"rez.jpg\")\n\n#translate\nt<-translate(m, tr, output.dim=dim(imgRef)[1:2]) \nwriteJPEG(t,target = \"tra.jpg\")\n#src pic now has same coordinates as ref pic\n\n#generate overlay\nn<-translate(m, tr, output.dim=dim(imgRef)[1:2]) \nn<-n+imgRef-n*imgRef\nwriteJPEG(n, \"overlay.jpg\")\n\n\n\n\n\n",
+    "created" : 1457645538657.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3858499185",
+    "id" : "32558B7B",
+    "lastKnownWriteTime" : 1457644824,
+    "path" : "Q:/Projekte/R/GitHub/MALDI-tools-dev/image_trafo_script/compute_trafo_function.R",
+    "project_path" : "compute_trafo_function.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

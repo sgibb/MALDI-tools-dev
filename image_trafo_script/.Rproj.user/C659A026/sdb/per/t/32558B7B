@@ -1,0 +1,17 @@
+{
+    "contents" : "library(jpeg)\nlibrary(EBImage)\n\n#load images-------------------------------------------------------------\n\nmsi <- readJPEG(\"msi.jpg\")    #msi image\nhe <- readJPEG(\"he.jpg\")      #he image\n\nmsi<-flip(msi)\nmsi<-rotate(msi,angle = 90)\n\nhe<-flip(he)\nhe<-rotate(he,angle = 90)\n\ndisplay(msi)\ndisplay(he)\n#!now chose ref coordinates from display in browser \n\n\n\n#trafo-------------------------------------------------------------------\n\np1<-c(126,34); p2<-c(240,123)  #two ref points(x,y) in msi image\nq1<-c(47,34); q2<-c(161,123)  #two ref points(x,y) in he image\n\n#rotation\ndot = sum((q2-q1)*(p2-p1))                         #dot product\nd=det(matrix(c(q2-q1,p2-p1), ncol=2, byrow= TRUE)) #determinant\nalpha<- atan2(d, dot)                              #rotation angle\nrot<-rotate(he, alpha*(180/pi))                      #rotate he image\nwriteJPEG(rot,target = \"rot.jpg\")                    #save\n\n\n#generate resizing + translation parameters\nR<-matrix(c(cos(alpha), -sin(alpha),\n            sin(alpha), cos(alpha)),\n          nrow=2, byrow=TRUE)\ntz<-c((dim(he)[1])/2,(dim(he)[2])/2)\ns<-abs((p2-p1)/(R%*%(q2-q1)))           \nsm<-matrix(c(s[1], 0, 0, s[2]), ncol=2, byrow=TRUE)\ntzN<-c((dim(rot)[1])/2,(dim(rot)[2])/2)\ntr<-p1-sm%*%(R%*%(q1-tz)+tzN)\nwh=(dim(rot)[1:2])*s\n\n#resize+save\nrez<-resize(rot, wh[1], wh[2])\nwriteJPEG(rez,target = \"rez.jpg\")\n\n#translate+save\n#he(tra) now has same coordinates as msi\ntra<-translate(rez, tr, output.dim=dim(msi)[1:2]) \nwriteJPEG(tra,target = \"tra.jpg\")\n\n#generate overlay img for visual control\novl<-tra+msi-tra*msi\nwriteJPEG(ovl, \"ovl.jpg\")\n\n#get back-flipped/rotated img for further analysis\ntra<-rotate(tra,-90)\ntra<-flip(tra)\nwriteJPEG(tra,target = \"tra2.jpg\")\n",
+    "created" : 1457645538657.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3882315489",
+    "id" : "32558B7B",
+    "lastKnownWriteTime" : 1457650134,
+    "path" : "Q:/Projekte/R/GitHub/MALDI-tools-dev/image_trafo_script/compute_trafo_function.R",
+    "project_path" : "compute_trafo_function.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
