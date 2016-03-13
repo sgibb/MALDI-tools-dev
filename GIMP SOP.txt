@@ -1,0 +1,8 @@
+open file
+layer-> new layer
+select new layer (menu to right)
+paint ROI black
+select only layer
+file-> export as jpeg
+open in irfan view -> image -> negative
+save
