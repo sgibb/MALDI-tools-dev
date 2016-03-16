@@ -6,17 +6,17 @@ get.mask.xy <- function (mask,value,label)
      mask <- as.array(mask)
      mask <- mask[,,1]
      xy <- which (mask==value, arr.ind = TRUE)
-     xyl <- as.data.frame(cbind(xy,label))
+     xy <- data.frame (xy)
+     xyl <- cbind(xy,label)
+     colnames(xyl) <- c("x","y","label")
      return(xyl)
 }
 
 
-get.msi.mask <- function (he.mask.file, trafo.matrix.file)
+get.msi.mask <- function (xyl.he, trafo.matrix.file)
 {
-     #read ROI x,y,label table and trafo matrix from csv files
-     t <- as.matrix(read.tab.uw(trafo.matrix.file))
-     xyl.he <- read.tab.uw(he.mask.file)
      xy.he <- as.matrix(xyl.he[,1:2])
+     t <- as.matrix(read.tab.uw(trafo.matrix.file))
      
      #get ROI msi coordinates from he coordinates
      xy.msi <- xy.he
@@ -24,7 +24,8 @@ get.msi.mask <- function (he.mask.file, trafo.matrix.file)
      {
           xy.msi[i,] <- round(get.msi(xy.he[i,],t))
      }
-     xyl.msi <- as.data.frame(cbind(xy.msi,as.character(xyl.he[,3])))
+     xy.msi <- data.frame (xy.msi)
+     xyl.msi <- cbind(xy.msi,as.character(xyl.he[,3]))
      colnames(xyl.msi) <- c("x","y","label")
      return(xyl.msi)
 }
