@@ -4,15 +4,15 @@ library (RNiftyReg)
 read.csv.uw <- function(file)
 {
      return (data.frame(read.csv(
-          file, header = TRUE, sep = ",", 
-          quote = "\"", dec = ".", 
+          file, header = TRUE, sep = "\t", 
+          quote = FALSE, dec = ".", 
           fill = TRUE, comment.char = "")))
 }
 
 write.csv.uw <- function(dataframe, file)
 {
      write.table(dataframe,file,
-            append=FALSE,quote=TRUE,sep=",",eol="\n",na="NA",dec=".",
+            append=FALSE,quote=FALSE,sep="\t",eol="\n",na="NA",dec=".",
             row.names=FALSE,col.names=TRUE,
             qmethod=c("escape", "double"),fileEncoding="")
 }
