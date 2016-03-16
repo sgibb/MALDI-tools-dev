@@ -90,12 +90,8 @@ peaks <- detectPeaks(st,
 bins <- binPeaks(peaks, 
                  tolerance=$binPeaks_tolerance)
 
-write.matrix(bins, 
-             file = "$outfile_tabular", 
-             sep = "\t")
-
-bins <- filterPeaks(bins, 
-                    minFrequency=0.25)
+#bins <- filterPeaks(bins, 
+#                    minFrequency=0.25)
 
 
 ##save analysis results
